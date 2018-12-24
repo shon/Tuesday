@@ -1,10 +1,12 @@
+from enum import Enum
+
 from peewee import ForeignKeyField, BooleanField, TextField, IntegerField
 from peewee import ArrayField, BinaryJSONField, DateTimeField
 from appbase.pw import CommonModel
 
 
 class BaseComment(CommonModel):
-    commentor = ForeignKeyField(index=True)
+    commenter = ForeignKeyField(index=True)
     editors_pick = BooleanField(default=False, index=True)
     asset = ForeignKeyField(index=True, unique=True)
     content = TextField()
@@ -28,7 +30,7 @@ class ArchivedComment(BaseComment):
     pass
 
 
-class Commentor(CommonModel):
+class Commenter(CommonModel):
     uid = IntegerField(index=True, unique=True)
     username = TextField(unique=True)
     name = TextField()
@@ -39,9 +41,9 @@ class Commentor(CommonModel):
     verified = BooleanField(default=False)
 
 
-class CommentorStats(CommonModel):
+class commenterStats(CommonModel):
     # {count: 0, reported: <int>, accepted: <int>, rejected: <int>}
-    commentor = ForeignKeyField(index=True)
+    commenter = ForeignKeyField(index=True)
     comments = IntegerField(default={})
     reported = IntegerField(default={})
     editor_picks = IntegerField(default=0)
@@ -54,13 +56,14 @@ class Publication(CommonModel):
 
 class Asset(CommonModel):
     url = TextField()
+    publication = ForeignKeyField(null=True)
     open_till = DateTimeField()
 
 
 class AssetRequest(CommonModel):
     url = TextField(Asset)
-    requested_by = IntegerField(null=True)
-    approved_by = IntegerField(null=True)
+    requester = IntegerField(null=True)
+    approver = IntegerField(null=True)
 
 
 class FlaggedReport(CommonModel):
@@ -73,3 +76,16 @@ class FlaggedReport(CommonModel):
     comment = ForeignKeyField(null=False)
     reporter = ForeignKeyField(null=False)
     accepted = BooleanField(default=False)
+
+
+class actions(Enum):
+    approved = 0
+    rejected = 1
+    picked = 2
+
+
+class CommentActionLog:
+    comment = IntegerField(null=False, unique=True)
+    actions = BinaryJSONField(default={})
+    # actions: {t1: {actor: <int>, action: <int:action-id>}, t2: {actor: ..},..}
+    #   actor: <int> # 0 is reserved for system
