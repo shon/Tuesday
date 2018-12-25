@@ -5,10 +5,13 @@
 ## Features
 
 ### Headless
-Tuesday comments UI agnostic. It aims to provide all APIs needed for common comments implemntation.
+Tuesday comments UI agnostic. It aims to provide all APIs needed for common comments implemntations.
 
-## Scalability
+### Scalability
 Tuesday aims to scale well for medium sized web sites.
+
+### Easier moderation
+Tuesday has builtin capabilities to simplify moderator's job
 
 ## Tuesday?
 The project was born on Tuesday. I considered various names but couldn't freeze on one so chose the name of the day it was born.
