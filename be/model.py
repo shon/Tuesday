@@ -41,7 +41,7 @@ class Commenter(CommonModel):
     verified = BooleanField(default=False)
 
 
-class commenterStats(CommonModel):
+class CommenterStats(CommonModel):
     # {count: 0, reported: <int>, accepted: <int>, rejected: <int>}
     commenter = ForeignKeyField(index=True)
     comments = IntegerField(default={})
@@ -64,6 +64,7 @@ class AssetRequest(CommonModel):
     url = TextField(Asset)
     requester = IntegerField(null=True)
     approver = IntegerField(null=True)
+    status = IntegerField(default=0)  # 0: pending, 1: accepted, 2: rejected
 
 
 class FlaggedReport(CommonModel):
